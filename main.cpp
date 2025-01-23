@@ -7,6 +7,11 @@
 // windows platform
 //  輔系 -> 轉系/雙主修 - 3月初3次考試 / 5月考4次
 
+//  How to google and find your answers?
+// cplusplus: dictionary
+// geeksforgeeks: wikipedia
+// stackoverflow: Q&A
+
 using namespace std;
 
 #include "includes.h"
@@ -34,11 +39,20 @@ int main() {
   case 6:
     // time complexity (SKIP)
     break;
-  case 7: // vector : TBV
+  case 7:
+    basic_cplusplus_operators();
+    break;
+  case 8: // vector
     basic_vector_usage();
     break;
-  case 8:
+  case 9: // pointer, reference
     basic_pointer_usage();
+    break;
+  case 10:
+    // call by value, call by reference (SKIP)
+    break;
+  case 11:
+    leetcode_sorting_two_sorted_lists();
     break;
   default:
     cout << "not a supported testID" << testID << endl;
@@ -48,31 +62,87 @@ int main() {
   return 0;
 }
 
+void leetcode_sorting_two_sorted_lists() {
+  // HW0122
+  vector<int> a = {3, 5, 6, 10, 12};
+  vector<int> b = {0, 1, 4, 14, 16};
+  vector<int> c;
+  // Q: two sorted lists a and b, combine a and b to c and make c as a sorted
+  // list too.
+  //    c = {0, 1, 3, 4, 5, 6, 10, 12, 14, 16}
+}
+
+void basic_cplusplus_operators() {
+  // simplified if-else
+  int a = 5;
+  int b;
+  if (a == 5) {
+    b = 2;
+  } else {
+    b = 0;
+  }
+
+  // equivalent to
+  b = (a == 5) ? (2) : (0);
+
+  // auto
+  auto x = a;
+
+  string name = "hello";
+  auto tmp = name;
+}
+
 void basic_pointer_usage() {
   int a = 5; //  &a  : memory address of a  / key
   int b = 3;
 
-  //pointer
-  int* p; //* for 宣告 : data type for memory address
+  // pointer
+  int *p; //* for 宣告 : data type for memory address
   p = &a;
 
   *p = 0; //* for operator : reference that the memory address pointing to.
   cout << "a=" << a << endl;
 
-  int* x = p;
+  int *x = p;
   *x = 1;
   cout << "a=" << a << endl;
 
+  // reference (exception for assignement)
+  int m = 5;
+
+  int &mr = m;
+  mr = 0;
+  printf("m = %d\n", m);
+
+  int &mr2 = m;
+  mr2 = 1;
+  printf("m = %d\n", m);
+
+  /*  by definition not allowed
+  int& mr3;
+  mr3 = m;
+  */
 }
 
 void basic_vector_usage() {
   /*
+
+    https://cplusplus.com/reference/vector/vector/
+
     .size() : return the size of vector
     .push_back(element) : append element to the vector
     .pop_back() : erase the last element from vector
+
     .front() : get the 1st-element reference of vector
     .back() : get the last-lement refernece of vector
 
+    .begin() : the 1st iterator (pointing to the 1st element)
+    .end()   : the last iterator (just behind the last element)
+
+    .erase(iterator pos) : erase the element with the "iterator pos"
+    .insert(iterator pos, element) : insert the element to the iterator pos
+
+    .insert () //TBV
   */
 
   // basic
@@ -118,11 +188,94 @@ void basic_vector_usage() {
   }
   cout << endl;
 
-  // ---- TBV -----
-  // iterator
-  // for
-  // erase
-  // insert
+  printf("----- iterator ------\n");
+  {
+    int a[5] = {3, 4, 5, 1, 2}; // array
+    // memory   0  1  2  3  4
+    // address  a  a+1     a+4
+
+    vector<int> v = {3, 4, 5, 1, 2}; // vector
+    // memory          ->  ->  ->  ->
+    // address       (uncertain) -> must be continuous since X version
+    // iterator      like pointer but not pointer (usage is the same)
+    //                                 ^.end()
+    //              ^.begin()
+
+    bool isTheSame = (*(v.begin()) == v.front());
+    printf("%d\n", isTheSame ? 1 : 0);
+
+    isTheSame =
+        (*(v.end()) == v.back()); // .end() is right behind the last element
+    printf("%d\n", isTheSame ? 1 : 0);
+
+    // data type
+    vector<int>::iterator it = v.end();
+    it--;
+    isTheSame = (*it == v.back());
+    printf("%d\n", isTheSame ? 1 : 0);
+
+    auto itmp = v.begin();
+
+    // iterator operators : ++ --  (other operators might not be supported, like
+    // +, -)
+  }
+
+  printf("------loop -------\n");
+  {
+    vector<int> a = {3, 1, 5, 4, 2};
+    // Q: print out every value in a
+    for (int i = 0; i < a.size(); i++) {
+      cout << a[i] << " ";
+    }
+    cout << endl;
+
+    // iterator for for loop
+    for (vector<int>::iterator it = a.begin(); it != a.end(); it++) {
+      cout << *it << " ";
+    }
+    cout << endl;
+
+    // simplified
+    for (auto it = a.begin(); it != a.end(); it++) {
+      cout << *it << " ";
+    }
+    cout << endl;
+
+    // more simplified
+    for (auto r : a) {
+      cout << r << " ";
+    }
+    cout << endl;
+
+    // variation (preferred) (potentially better performance)
+    for (auto &r : a) {
+      cout << r << " ";
+    }
+    cout << endl;
+  }
+
+  // erase()
+  {
+    vector<int> a = {5, 4, 1, 2, 3};
+
+    // Q: erase the index-2 element
+    a.erase(a.begin() + 2);
+
+    for (auto &r : a)
+      cout << r << " ";
+    cout << endl;
+  }
+
+  // insert()
+  {
+    vector<int> a = {5, 4, 1, 2, 3};
+    // Q: insert 0 to the position of index-2
+    a.insert(a.begin() + 2, 0);
+
+    for (auto &r : a)
+      cout << r << " ";
+    cout << endl;
+  }
 }
 
 void basic_loop() {
@@ -325,7 +478,13 @@ void leetcode_shuffle_two_arrays() {
   }
 
   printf("--- case 2 : vector------\n");
-  {}
+  {
+    vector<int> a = {8, 5, 1, 4, 2, 3, 6, 9};
+    vector<int> b = {0, 3, 1, 7};
+    vector<int> c;
+
+    // HW0122
+  }
 }
 
 void leetcode_bubble_sort() {
