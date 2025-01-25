@@ -18,7 +18,7 @@ using namespace std;
 
 int main() {
 
-  int testID = 8;
+  int testID = 11;
 
   switch (testID) {
   case 0:
@@ -67,6 +67,22 @@ void leetcode_sorting_two_sorted_lists() {
   vector<int> a = {3, 5, 6, 10, 12};
   vector<int> b = {0, 1, 4, 14, 16};
   vector<int> c;
+  while (!a.empty() || !b.empty()) {
+    if (a.empty()) {
+        c.push_back(b.front());
+        b.erase(b.begin());
+    } else if (b.empty()) {
+        c.push_back(a.front());
+        a.erase(a.begin());
+    } else {
+      c.push_back(min(a.front(),b.front()));
+      c.back() == a.front() && !a.empty() ? a.erase(a.begin()) : b.erase(b.begin());
+    }
+  }
+  for (int r : c) {
+    cout << r << " ";
+  }
+  cout << endl;
   // Q: two sorted lists a and b, combine a and b to c and make c as a sorted
   // list too.
   //    c = {0, 1, 3, 4, 5, 6, 10, 12, 14, 16}
@@ -332,8 +348,7 @@ void basic_loop() {
   //  top-down thinking:
   index = 0;
   // while(1) //Step 0: infinite loop
-  while (index <
-         xSize) // Step 3 (optional): revert "ending" to "satisfied" condtion
+  while (index < xSize) // Step 3 (optional): revert "ending" to "satisfied" condtion
   {
     // step 1: figure out how to form iteration
     cout << x[index] << " ";
@@ -482,6 +497,20 @@ void leetcode_shuffle_two_arrays() {
     vector<int> a = {8, 5, 1, 4, 2, 3, 6, 9};
     vector<int> b = {0, 3, 1, 7};
     vector<int> c;
+    int a_index = 0;
+    int b_index = 0;
+    while(a_index < a.size() || (b_index < b.size())){
+        if(a_index < a.size()){
+            c.push_back(a[a_index++]);
+        }
+        if(b_index < b.size()){
+            c.push_back(b[b_index++]);
+        }
+    }
+    for (auto it = c.begin(); it != c.end(); it++) {
+      cout << *it << " ";
+    }
+    cout << endl;
 
     // HW0122
   }
