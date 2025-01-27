@@ -2,6 +2,7 @@
 #include <cstdio>
 #include <cstdlib>
 #include <iostream>
+#include <string>
 #include <vector>
 
 // windows platform
@@ -50,9 +51,13 @@ int main() {
     break;
   case 10:
     // call by value, call by reference (SKIP)
+    basic_call_by_reference();
     break;
   case 11:
     leetcode_sorting_two_sorted_lists();
+    break;
+  case 12:                // string
+    basic_string_usage(); // SKIP
     break;
   default:
     cout << "not a supported testID" << testID << endl;
@@ -62,27 +67,103 @@ int main() {
   return 0;
 }
 
+void basic_string_usage() {
+  string name = "John";
+  char letter = name[2]; // h
+  int code = 'h';
+  // ASCII
+  //  a-z, A-Z , 0-9
+
+  // SKIP
+}
+
+int addAB(int a, int b) { return a + b; }
+// function "overloading"
+void addAB(int a, int b, int &c) { c = a + b; }
+
+// polymorephism "多型" / "套殼"
+void basic_call_by_reference() {
+  int a = 5;
+  int b = 3;
+  int c = -1;
+
+  // Q: a+b => c
+  printf("(before)a= %d, b= %d, c= %d\n", a, b, c);
+  c = addAB(a, b);
+  printf("(after)a= %d, b= %d, c= %d\n", a, b, c);
+  printf("\n");
+
+  a = 5;
+  b = 3;
+  c = -1;
+  printf("(before)a= %d, b= %d, c= %d\n", a, b, c);
+  addAB(a, b, c);
+  printf("(after)a= %d, b= %d, c= %d\n", a, b, c);
+  printf("\n");
+}
+
 void leetcode_sorting_two_sorted_lists() {
   // HW0122
-  vector<int> a = {3, 5, 6, 10, 12};
-  vector<int> b = {0, 1, 4, 14, 16};
-  vector<int> c;
-  while (!a.empty() || !b.empty()) {
-    if (a.empty()) {
+  // the core of "merge sort" algorithm
+
+  // bubble sort : O(N^2)
+  // std::sort()  : O(NlogN)
+
+  // time complexity : O(N)
+  {
+    vector<int> a = {3, 5, 6, 10, 12};
+    vector<int> b = {0, 1, 4, 14, 16};
+    vector<int> c;
+
+    while (!a.empty() || !b.empty()) {
+      if (a.empty()) {
         c.push_back(b.front());
         b.erase(b.begin());
-    } else if (b.empty()) {
+      } else if (b.empty()) {
         c.push_back(a.front());
         a.erase(a.begin());
-    } else {
-      c.push_back(min(a.front(),b.front()));
-      c.back() == a.front() && !a.empty() ? a.erase(a.begin()) : b.erase(b.begin());
+      } else {
+        c.push_back(min(a.front(), b.front()));
+        c.back() == a.front() && !a.empty() ? a.erase(a.begin())
+                                            : b.erase(b.begin());
+      }
     }
+    for (int r : c) {
+      cout << r << " ";
+    }
+    cout << endl;
   }
-  for (int r : c) {
-    cout << r << " ";
+
+  {
+    vector<int> a = {3, 5, 6, 10, 12};
+    vector<int> b = {0, 1, 4, 14, 16};
+    vector<int> c;
+
+    while (!a.empty() || !b.empty()) {
+      // select x from a or b
+      vector<int> *x = &a;
+      if (a.empty()) {
+        x = &b;
+      } else if (b.empty()) {
+      } else if (b.front() < a.front()) {
+        x = &b;
+      }
+
+      // NOT SUGGESTED : BAD readibility
+      // vector<int>* x = (a.empty())?(&b):(
+      //   (b.empty())?(&a):((a.front() < b.front()) ? (&a) : (&b))
+      // );
+
+      // append x front to c
+      c.push_back(x->front());
+      x->erase(x->begin());
+    }
+    for (int r : c) {
+      cout << r << " ";
+    }
+    cout << endl;
   }
-  cout << endl;
+
   // Q: two sorted lists a and b, combine a and b to c and make c as a sorted
   // list too.
   //    c = {0, 1, 3, 4, 5, 6, 10, 12, 14, 16}
@@ -138,6 +219,10 @@ void basic_pointer_usage() {
   int& mr3;
   mr3 = m;
   */
+
+  // Purpose of using pointer
+  //  (1) access memory by call-by-reference method
+  //  (2) purpose-base switch
 }
 
 void basic_vector_usage() {
@@ -146,6 +231,7 @@ void basic_vector_usage() {
     https://cplusplus.com/reference/vector/vector/
 
     .size() : return the size of vector
+      => .empty() : return true is size() ==0, otherwise, return false
     .push_back(element) : append element to the vector
     .pop_back() : erase the last element from vector
 
@@ -158,7 +244,8 @@ void basic_vector_usage() {
     .erase(iterator pos) : erase the element with the "iterator pos"
     .insert(iterator pos, element) : insert the element to the iterator pos
 
-    .insert () //TBV
+    .insert (iterator dst pos, iterator source begin pos, iterator source end
+    pos)
   */
 
   // basic
@@ -292,6 +379,19 @@ void basic_vector_usage() {
       cout << r << " ";
     cout << endl;
   }
+
+  // insert()
+  {
+    vector<int> a = {5, 4, 1, 3, 2};
+    vector<int> b = {0, 0};
+
+    // Q: insert enter vector b to index-3 position in a
+    a.insert(a.begin() + 3, b.begin(), b.end());
+
+    for (auto &r : a)
+      cout << r << " ";
+    cout << endl;
+  }
 }
 
 void basic_loop() {
@@ -348,7 +448,8 @@ void basic_loop() {
   //  top-down thinking:
   index = 0;
   // while(1) //Step 0: infinite loop
-  while (index < xSize) // Step 3 (optional): revert "ending" to "satisfied" condtion
+  while (index <
+         xSize) // Step 3 (optional): revert "ending" to "satisfied" condtion
   {
     // step 1: figure out how to form iteration
     cout << x[index] << " ";
@@ -492,27 +593,52 @@ void leetcode_shuffle_two_arrays() {
     printf("\n");
   }
 
-  printf("--- case 2 : vector------\n");
+  printf("--- case 2 : vector (v0) ------\n");
   {
+    // HW0122
     vector<int> a = {8, 5, 1, 4, 2, 3, 6, 9};
     vector<int> b = {0, 3, 1, 7};
     vector<int> c;
     int a_index = 0;
     int b_index = 0;
-    while(a_index < a.size() || (b_index < b.size())){
-        if(a_index < a.size()){
-            c.push_back(a[a_index++]);
-        }
-        if(b_index < b.size()){
-            c.push_back(b[b_index++]);
-        }
+    while (a_index < a.size() || (b_index < b.size())) {
+      if (a_index < a.size()) {
+        c.push_back(a[a_index++]);
+      }
+      if (b_index < b.size()) {
+        c.push_back(b[b_index++]);
+      }
     }
     for (auto it = c.begin(); it != c.end(); it++) {
       cout << *it << " ";
     }
     cout << endl;
+  }
 
-    // HW0122
+  printf("--- case 2 : vector (v1) ------\n");
+  {
+    vector<int> a = {8, 5, 1, 4, 2, 3, 6, 9};
+    vector<int> b = {0, 3, 1, 7};
+    vector<int> c;
+
+    while (!a.empty() || !b.empty()) {
+
+      // put a front to c
+      if (!a.empty()) {
+        c.push_back(a.front());
+        a.erase(a.begin());
+      }
+
+      // put b front to c
+      if (!b.empty()) {
+        c.push_back(b.front());
+        b.erase(b.begin());
+      }
+    }
+    for (auto it = c.begin(); it != c.end(); it++) {
+      cout << *it << " ";
+    }
+    cout << endl;
   }
 }
 
