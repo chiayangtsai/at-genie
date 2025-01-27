@@ -8,3 +8,4 @@ void basic_cplusplus_operators();
 void leetcode_sorting_two_sorted_lists();
 void basic_call_by_reference();
 void basic_string_usage();
+void leetcode_letters_histogram();

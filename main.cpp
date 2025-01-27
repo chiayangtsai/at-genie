@@ -59,12 +59,32 @@ int main() {
   case 12:                // string
     basic_string_usage(); // SKIP
     break;
+  case 14:
+    leetcode_letters_histogram();
+    break;
   default:
     cout << "not a supported testID" << testID << endl;
     exit(-1);
   }
 
   return 0;
+}
+
+void leetcode_letters_histogram() {
+
+  // Q : print out the histogram of alphbet appearance in alphbet order.
+  //
+  //   NOTE: non-existence and non-alphabet shall not be printed
+  //
+  // Example: "a; b69ad*b%a^a;"
+  //   print-out results:
+  //
+  //     a : 4
+  //     b : 2
+  //     d : 1
+  string word = "as;lkdjfha.. al;kshjdf;laikhs;dflk jkl;j!";
+
+  // HW0126
 }
 
 void basic_string_usage() {
