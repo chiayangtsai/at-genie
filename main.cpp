@@ -19,7 +19,7 @@ using namespace std;
 
 int main() {
 
-  int testID = 11;
+  int testID = 16;
 
   switch (testID) {
   case 0:
@@ -62,12 +62,109 @@ int main() {
   case 14:
     leetcode_letters_histogram();
     break;
+  case 15: // struct
+    basic_struct_usage();
+    break;
+  case 16: // dynamic memory allocation - new / delete
+    basic_dynamic_memory_allocation();
+    break;
+
+    // pair
+    // unordered_map
+    //.sort()
+    //  leetcode
+    // digits processing - decimal, binary
+    // map
+    // recursive (dynamic programming - easy)
+    //  leetcode
+    // binary tree - breath-frist creation
+
   default:
     cout << "not a supported testID" << testID << endl;
     exit(-1);
   }
 
   return 0;
+}
+
+void basic_dynamic_memory_allocation() {
+  int a[5] = {5, 4, 1, 3, 2};
+  //         a[0]
+  //               p[0]
+  // index    0  1  2  3  4
+  int *p = a + 2;
+  printf("*p= %d\n", *p);
+
+  printf("p[0]= %d\n", p[0]);
+  printf("p[1]= %d\n", p[1]);
+  printf("p[2]= %d\n", p[2]);
+
+  //array   : memory address with stack(pre-allocated) memory which is handled by O.S
+  //pointer : memory address without any allocated memory.
+  printf("p[-1]= %d\n", p[-1]);
+  //printf("a[-1]= %d\n", a[-1]); (X) <== a is with a stack memory
+  printf("p[3]= %d\n", p[3]); // memory violation
+
+  //TBV
+  int* ptr;
+  ptr = new int;
+  delete ptr;
+  
+
+}
+
+void basic_struct_usage() {
+  vector<string> sName = {"John", "Jack", "Topher", "Ku",
+                          "Elly", "Kim",  "Hailey"};
+  vector<int> sScore = {90, 97, 50, 65, 70, 100, 45};
+
+  int a = 5;
+
+  struct SDATA {
+
+    SDATA() // constructor : init values in object
+    {
+      name = "NA";
+      score = -1;
+    }
+
+    SDATA(string n, int s) // overloading constructor
+    {
+      name = n;
+      score = s;
+    }
+
+    string name;
+    int score;
+  };
+
+  SDATA tmp;
+  cout << "random: " << tmp.name << " " << tmp.score << endl;
+
+  tmp.name = "VK";
+  tmp.score = 75;
+
+  vector<SDATA> svec;
+  for (int i = 0; i < sName.size(); i++) {
+    //----- method 0 ------
+    // SDATA obj;
+    // obj.name = sName[i];
+    // obj.score = sScore[i];
+
+    //----- method 1 ------
+    SDATA obj(sName[i], sScore[i]);
+
+    //----- method 2 ------
+    // TBV
+
+    svec.push_back(obj);
+  }
+
+  for (auto &r : svec) {
+    cout << r.name << " " << r.score << endl;
+  }
+  // dynamic allocation memory for "object"
+  // TBV
 }
 
 void leetcode_letters_histogram() {
@@ -82,9 +179,80 @@ void leetcode_letters_histogram() {
   //     a : 4
   //     b : 2
   //     d : 1
-  string word = "as;lkdjfha.. al;kshjdf;laikhs;dflk jkl;j!";
+  //
+  // The optimized time complexity : O(N)
+  //  // HW0126
 
-  // HW0126
+  // method 1
+  int a = 6;
+
+  {
+    string word = "as;lkdjfha.. al;kshjdf;laikhs;dflk jkl;j!";
+    vector<char> collect;
+    while (!word.empty()) {
+      if (word.front() >= 'a' && word.front() <= 'z') {
+        collect.push_back(word.front());
+      }
+      word.erase(word.begin());
+    }
+    sort(collect.begin(), collect.end()); // O(NlogN)
+
+    int num = 1;
+    for (int i = 1; i < collect.size(); i++) {
+      if (collect[i] != collect[i - 1]) {
+        cout << collect[i - 1] << " : " << num << '\n';
+        num = 1;
+      } else {
+        num++;
+      }
+    }
+    if (!collect.empty()) {
+      cout << collect.back() << " : " << num << '\n';
+    }
+  }
+
+  // method 2
+  {
+    string word = "as;lkdjfha.. al;kshjdf;laikhs;dflk jkl;j!";
+    vector<char> collect;
+    while (!word.empty()) {
+      if (word.front() >= 'a' && word.front() <= 'z') {
+        collect.push_back(word.front());
+      }
+      word.erase(word.begin());
+    }
+    sort(collect.begin(), collect.end()); // O(NlogN)
+    int Num = 1;
+    while (!collect.empty()) {
+      char Current = collect.front();
+      collect.erase(collect.begin());
+      while (!collect.empty() && Current == collect.front()) {
+        collect.erase(collect.begin());
+        Num++;
+      }
+      cout << Current << " : " << Num << '\n';
+      Num = 1;
+    }
+  }
+  {
+    // method 3
+    string word = "as;lkdjfha.. al;kshjdf;laikhs;dflk jkl;j!";
+    int frequency[26] = {0};
+
+    // O(N)
+    for (auto &c : word) {
+      if (c >= 'a' && c <= 'z') {
+        frequency[c - 'a']++;
+      }
+    }
+
+    // O(1)
+    for (char c = 'a'; c <= 'z'; c++) {
+      if (frequency[c - 'a'] > 0) {
+        cout << c << " : " << frequency[c - 'a'] << '\n';
+      }
+    }
+  }
 }
 
 void basic_string_usage() {

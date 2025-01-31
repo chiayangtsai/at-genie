@@ -9,3 +9,5 @@ void leetcode_sorting_two_sorted_lists();
 void basic_call_by_reference();
 void basic_string_usage();
 void leetcode_letters_histogram();
+void basic_struct_usage();
+void basic_dynamic_memory_allocation();
