@@ -11,3 +11,4 @@ void basic_string_usage();
 void leetcode_letters_histogram();
 void basic_struct_usage();
 void basic_dynamic_memory_allocation();
+void leetcode_remove_duplicate_from_sorted_array();

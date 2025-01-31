@@ -56,19 +56,22 @@ int main() {
   case 11:
     leetcode_sorting_two_sorted_lists();
     break;
-  case 12:                // string
+  case 12:
+    leetcode_remove_duplicate_from_sorted_array();
+    break;
+  case 14:                // string
     basic_string_usage(); // SKIP
     break;
-  case 14:
+  case 15:
     leetcode_letters_histogram();
     break;
-  case 15: // struct
+  case 16: // struct
     basic_struct_usage();
     break;
-  case 16: // dynamic memory allocation - new / delete
+  case 17: // dynamic memory allocation - new / delete
     basic_dynamic_memory_allocation();
     break;
-
+  
     // pair
     // unordered_map
     //.sort()
@@ -99,18 +102,16 @@ void basic_dynamic_memory_allocation() {
   printf("p[1]= %d\n", p[1]);
   printf("p[2]= %d\n", p[2]);
 
-  //array   : memory address with stack(pre-allocated) memory which is handled by O.S
-  //pointer : memory address without any allocated memory.
+  // array   : memory address with stack(pre-allocated) memory which is handled
+  // by O.S pointer : memory address without any allocated memory.
   printf("p[-1]= %d\n", p[-1]);
-  //printf("a[-1]= %d\n", a[-1]); (X) <== a is with a stack memory
+  // printf("a[-1]= %d\n", a[-1]); (X) <== a is with a stack memory
   printf("p[3]= %d\n", p[3]); // memory violation
 
-  //TBV
-  int* ptr;
+  // TBV
+  int *ptr;
   ptr = new int;
   delete ptr;
-  
-
 }
 
 void basic_struct_usage() {
@@ -848,4 +849,80 @@ void leetcode_bubble_sort() {
   for (int i = 0; i < length; i++) {
     cout << a[i] << " ";
   }
+}
+
+int removeDuplicates(vector<int> in) {
+  // HW0130
+  return -1; // remember to modify it
+}
+void leetcode_remove_duplicate_from_sorted_array() {
+  // https://leetcode.com/problems/remove-duplicates-from-sorted-array/description
+  /*
+  Given an integer array nums sorted in non-decreasing order, remove the
+  duplicates in-place such that each unique element appears only once. The
+  relative order of the elements should be kept the same. Then return the number
+  of unique elements in nums.
+
+  Consider the number of unique elements of nums to be k, to get accepted, you
+  need to do the following things:
+
+  Change the array nums such that the first k elements of nums contain the
+  unique elements in the order they were present in nums initially. The
+  remaining elements of nums are not important as well as the size of nums.
+  Return k.
+  Custom Judge:
+
+  The judge will test your solution with the following code:
+
+  int[] nums = [...]; // Input array
+  int[] expectedNums = [...]; // The expected answer with correct length
+
+  int k = removeDuplicates(nums); // Calls your implementation
+
+  assert k == expectedNums.length;
+  for (int i = 0; i < k; i++) {
+      assert nums[i] == expectedNums[i];
+  }
+  If all assertions pass, then your solution will be accepted.
+
+
+
+  Example 1:
+
+  Input: nums = [1,1,2]
+  Output: 2, nums = [1,2,_]
+  Explanation: Your function should return k = 2, with the first two elements of
+  nums being 1 and 2 respectively. It does not matter what you leave beyond the
+  returned k (hence they are underscores). Example 2:
+
+  Input: nums = [0,0,1,1,1,2,2,3,3,4]
+  Output: 5, nums = [0,1,2,3,4,_,_,_,_,_]
+  Explanation: Your function should return k = 5, with the first five elements
+  of nums being 0, 1, 2, 3, and 4 respectively. It does not matter what you
+  leave beyond the returned k (hence they are underscores).
+
+
+  Constraints:
+
+  1 <= nums.length <= 3 * 104
+  -100 <= nums[i] <= 100
+  nums is sorted in non-decreasing order.
+
+   */
+  vector<int> in;
+  int res;
+
+  in = {1, 1, 2};
+  printf("res = %d (ans = 2)\n", removeDuplicates(in));
+  for (auto &ir : in)
+    printf("%d ", ir);
+  printf("\n");
+  printf("ans: 1, 2 \n");
+
+  in = {0, 0, 1, 1, 1, 2, 2, 3, 3, 4};
+  printf("res = %d (ans = 5)\n", removeDuplicates(in));
+  for (auto &ir : in)
+    printf("%d ", ir);
+  printf("\n");
+  printf("ans: 0,1,2,3,4 \n");
 }
