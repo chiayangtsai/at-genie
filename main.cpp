@@ -74,6 +74,9 @@ int main() {
   case 18: // pair
     basic_pair_usage();
     break;
+  case 19:
+    leetcode_fibonacii_seq();
+    break;
 
     // pair
     // unordered_map
@@ -91,6 +94,28 @@ int main() {
   }
 
   return 0;
+}
+
+int getF(int k)
+{
+  //HW0206: Please don't use recursive.
+  
+  return -1; //記得改  
+}
+
+void leetcode_fibonacii_seq() {
+  // Fibonacii sequence :
+  //   X(n) = X(n-1) + X(n-2), and X(0)=0, X(1) = 1
+  //  X = {0, 1, 1, 2, 3, 5, 8, 13, 21, 34, 55, ...}
+  //  That is,
+  //  X(0)=0, X(1)= 1, X(2)= 1, X(3)= 2, X(4) = 3, X(5) = 5, X(6) = 8...
+  //
+  //  Q: Given k, please give X(k) value
+  //  For example : k=3, X(k)= 2
+  //                k=5, X(k)= X(5) = 5
+
+  int k = 12;
+  printf("X(%d)= %d", k, getF(k));
 }
 
 void basic_dynamic_memory_allocation() {
