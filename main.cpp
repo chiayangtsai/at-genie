@@ -19,7 +19,7 @@ using namespace std;
 
 int main() {
 
-  int testID = 16;
+  int testID = 17;
 
   switch (testID) {
   case 0:
@@ -71,7 +71,10 @@ int main() {
   case 17: // dynamic memory allocation - new / delete
     basic_dynamic_memory_allocation();
     break;
-  
+  case 18: // pair
+    basic_pair_usage();
+    break;
+
     // pair
     // unordered_map
     //.sort()
@@ -108,10 +111,87 @@ void basic_dynamic_memory_allocation() {
   // printf("a[-1]= %d\n", a[-1]); (X) <== a is with a stack memory
   printf("p[3]= %d\n", p[3]); // memory violation
 
-  // TBV
-  int *ptr;
-  ptr = new int;
-  delete ptr;
+  // new delete
+  printf("---- new- single object ---\n");
+  {
+    int *ptr;
+    ptr = new int; // 4-bytes = 32-bit variable
+    *ptr = 0;
+    printf("*ptr = %d\n", *ptr);
+    delete ptr;
+  }
+  printf("---- new- array ---\n");
+  {
+    int *ptr;
+    // Q: get an array with 5 integers to ptr
+    int k = 10;
+    ptr = new int[k];
+    delete[] ptr;
+  }
+  printf("----- new - single object w/ constructor ----\n");
+  {
+    int *ptr;
+    ptr = new int(-1); // 4-bytes = 32-bit variable
+    //*ptr = 0;
+    printf("*ptr = %d\n", *ptr);
+    delete ptr;
+  }
+
+  printf("----- new - single object w/ constructor ----\n");
+  {
+    // Q: new a vector object to pointer ptr w/ an initial input {1, 2, 3}
+    vector<int> *ptr = new vector<int>({1, 2, 3});
+    for (auto i : *ptr) {
+      cout << i << " ";
+    }
+    cout << endl;
+    // iterator
+    for (auto it = (*ptr).begin(); it != (*ptr).end(); it++) {
+      cout << *it << " ";
+    }
+    cout << endl;
+
+    // ->
+    for (auto it = ptr->begin(); it != ptr->end(); it++) {
+      cout << *it << " ";
+    }
+    cout << endl;
+
+    // Q: append a "0" to ptr vector
+    ptr->push_back(0);
+    for (auto it = ptr->begin(); it != ptr->end(); it++) {
+      cout << *it << " ";
+    }
+    cout << endl;
+
+    // Q: using index to print out all values in the vector
+    for (int i = 0; i < ptr->size(); i++) {
+      cout << (*ptr)[i] << " ";
+    }
+    cout << endl;
+
+    // reference
+    vector<int> &r = *ptr;
+    for (int i = 0; i < r.size(); i++) {
+      cout << r[i] << " ";
+    }
+    cout << endl;
+
+    delete ptr;
+  }
+}
+void basic_pair_usage() {
+  vector<string> sName = {"John", "Jack", "Topher", "Ku",
+                          "Elly", "Kim",  "Hailey"};
+  vector<int> sScore = {90, 97, 50, 65, 70, 100, 45};
+
+  vector<pair<string, int>> data;
+  for (int i = 0; i < sName.size(); i++) {
+    // data.push_back(pair<string, int>(sName[i], sScore[i])); <== This is OKAY
+    data.push_back(make_pair(sName[i], sScore[i]));
+  }
+
+  // TBV : sort()
 }
 
 void basic_struct_usage() {
@@ -153,19 +233,19 @@ void basic_struct_usage() {
     // obj.score = sScore[i];
 
     //----- method 1 ------
-    SDATA obj(sName[i], sScore[i]);
+    // SDATA obj(sName[i], sScore[i]);
+    // svec.push_back(obj);
 
     //----- method 2 ------
-    // TBV
-
-    svec.push_back(obj);
+    svec.push_back(SDATA(sName[i], sScore[i]));
   }
 
   for (auto &r : svec) {
     cout << r.name << " " << r.score << endl;
   }
   // dynamic allocation memory for "object"
-  // TBV
+  SDATA *pt = new SDATA("Gina", 50);
+  delete pt;
 }
 
 void leetcode_letters_histogram() {
@@ -853,9 +933,21 @@ void leetcode_bubble_sort() {
 
 int removeDuplicates(vector<int> in) {
   // HW0130
-  return -1; // remember to modify it
+  // time complexity : O(N)
+  if (in.empty())
+    return 0;
+  int count = 1;
+  for (int i = 1; i < in.size(); i++) {
+    if (in[i] != in[i - 1]) {
+      in[count] = in[i];
+      count++;
+    }
+  }
+  return count;
+  // remember to modify it
 }
 void leetcode_remove_duplicate_from_sorted_array() {
+
   // https://leetcode.com/problems/remove-duplicates-from-sorted-array/description
   /*
   Given an integer array nums sorted in non-decreasing order, remove the
