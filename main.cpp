@@ -19,7 +19,7 @@ using namespace std;
 
 int main() {
 
-  int testID = 17;
+  int testID = 19;
 
   switch (testID) {
   case 0:
@@ -96,11 +96,40 @@ int main() {
   return 0;
 }
 
-int getF(int k)
-{
-  //HW0206: Please don't use recursive.
-  
-  return -1; //記得改  
+int getF(int k) {
+  // HW0206: Please don't use recursive.
+  // not recursion:
+  // {
+  if (k == 0)
+    return 0;
+  if (k == 1)
+    return 1;
+  int a = 0, b = 1, ans = 0;
+  for (int i = 2; i <= k; i++) {
+    ans = a + b;
+    a = b;
+    b = ans;
+  }
+  return ans;
+  // }
+  // // recursion:
+  // {
+  //   if (k == 0)
+  //     return 0;
+  //   if (k == 1)
+  //     return 1;
+  //   return getF(k - 1) + getF(k - 2);
+  // }
+}
+
+int getFR(int k) {
+  // recursion:
+
+  if (k == 0)
+    return 0;
+  if (k == 1)
+    return 1;
+  return getF(k - 1) + getF(k - 2);
 }
 
 void leetcode_fibonacii_seq() {
@@ -116,6 +145,7 @@ void leetcode_fibonacii_seq() {
 
   int k = 12;
   printf("X(%d)= %d", k, getF(k));
+  printf("X(%d)= %d", k, getFR(k));
 }
 
 void basic_dynamic_memory_allocation() {
