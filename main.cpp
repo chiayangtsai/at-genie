@@ -4,7 +4,7 @@
 #include <iostream>
 #include <string>
 #include <vector>
-
+#define MAX_N 100000000
 // windows platform
 //  輔系 -> 轉系/雙主修 - 3月初3次考試 / 5月考4次
 
@@ -74,10 +74,15 @@ int main() {
   case 18: // pair
     basic_pair_usage();
     break;
-  case 19:
+  case 19: // recursive
     leetcode_fibonacii_seq();
     break;
-
+  case 20:
+    basic_cstd_pair_unorderedmap_map();
+    break;
+  case 21:
+    leetcode_two_sum();
+    break;
     // pair
     // unordered_map
     //.sort()
@@ -94,6 +99,25 @@ int main() {
   }
 
   return 0;
+}
+
+void leetcode_two_sum() {
+  vector<int> data({5, 1, 6, 3, 9, 4, 3, 6});
+  int sum = 10;
+
+  // Q: print out the pair with sum = 9
+  //    NOTE: Don't print out the repeated pair
+}
+
+void basic_cstd_pair_unorderedmap() {
+  vector<int> sID = {3, 2, 6, 4, 8, 10, 9};
+  vector<string> sName = {"John", "Jack", "Topher", "Ku",
+                          "Elly", "Kim",  "Hailey"};
+
+  // TBV
+
+  //============  unordered_map =============================================//
+  // https://cplusplus.com/reference/unordered_map/unordered_map/unordered_map/
 }
 
 int getF(int k) {
@@ -121,15 +145,17 @@ int getF(int k) {
   //   return getF(k - 1) + getF(k - 2);
   // }
 }
-
+vector<int> finish(MAX_N, -1);
 int getFR(int k) {
   // recursion:
-
   if (k == 0)
     return 0;
   if (k == 1)
     return 1;
-  return getF(k - 1) + getF(k - 2);
+  if (finish[k] != -1)
+    return finish[k];
+  finish[k] = getF(k - 1) + getF(k - 2);
+  return finish[k];
 }
 
 void leetcode_fibonacii_seq() {
@@ -144,8 +170,8 @@ void leetcode_fibonacii_seq() {
   //                k=5, X(k)= X(5) = 5
 
   int k = 12;
-  printf("X(%d)= %d", k, getF(k));
-  printf("X(%d)= %d", k, getFR(k));
+  printf("X(%d)= %d\n", k, getF(k));
+  printf("X(%d)= %d\n", k, getFR(k));
 }
 
 void basic_dynamic_memory_allocation() {
