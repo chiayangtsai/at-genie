@@ -14,5 +14,5 @@ void basic_dynamic_memory_allocation();
 void leetcode_remove_duplicate_from_sorted_array();
 void basic_pair_usage();
 void leetcode_fibonacii_seq();
-void basic_cstd_pair_unorderedmap_map();
+void basic_cstd_pair_unorderedmap();
 void leetcode_two_sum();

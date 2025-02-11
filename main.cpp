@@ -4,7 +4,8 @@
 #include <iostream>
 #include <string>
 #include <vector>
-#define MAX_N 100000000
+#include <unordered_map>
+
 // windows platform
 //  輔系 -> 轉系/雙主修 - 3月初3次考試 / 5月考4次
 
@@ -19,7 +20,7 @@ using namespace std;
 
 int main() {
 
-  int testID = 19;
+  int testID = 20;
 
   switch (testID) {
   case 0:
@@ -78,7 +79,7 @@ int main() {
     leetcode_fibonacii_seq();
     break;
   case 20:
-    basic_cstd_pair_unorderedmap_map();
+    basic_cstd_pair_unorderedmap ();
     break;
   case 21:
     leetcode_two_sum();
@@ -102,32 +103,76 @@ int main() {
 }
 
 void leetcode_two_sum() {
-  vector<int> data({5, 1, 6, 3, 9, 4, 3, 6});
+  vector<int> data({1, 6, 5, 3, 9, 4, 3, 6});
   int sum = 10;
 
   // Q: print out the pair with sum = 9
-  //    NOTE: Don't print out the repeated pair
+  //    (6, 4) (1,9)
+  //    NOTE: Don't print out the repeated pair  
+
+  //HW0210
+  //O(N^3)
+  //O(N^2) <== minimum requirement
+  //O(N) <== good job!
+  
 }
 
 void basic_cstd_pair_unorderedmap() {
-  vector<int> sID = {3, 2, 6, 4, 8, 10, 9};
   vector<string> sName = {"John", "Jack", "Topher", "Ku",
                           "Elly", "Kim",  "Hailey"};
+  vector<int> sScore = {50, 20, 60, 40, 80, 100, 90};
 
-  // TBV
+  //search
+  //vector/array :  O(N)
+  //look-up table:  O(1)
+
+  unordered_map<string, int> sTable; //key , value
+  for(int i=0; i< sName.size(); i++){
+    sTable[ sName[i] ] = sScore[i];
+  }
+
+  // John 50
+  // Jack 20
+  //..
+
+  for(auto it = sTable.begin(); it != sTable.end();it++){
+    cout << it->first << " " << it->second << endl;
+  }
+  cout << endl;
+
 
   //============  unordered_map =============================================//
   // https://cplusplus.com/reference/unordered_map/unordered_map/unordered_map/
+  // .find(key) : return iterator. If not found, return .end()
+
+  cout << sTable["John"] << endl;
+
+  string key = "VK";
+  if( sTable.find(key) != sTable.end()){
+    cout << sTable[key] << endl;
+  }
+  else //error control
+  {
+    cout << key << " not found" << endl; 
+  }
+ 
 }
 
 int getF(int k) {
   // HW0206: Please don't use recursive.
+
+  // time complexity : O(N)
+
   // not recursion:
   // {
+
+  // exception
   if (k == 0)
     return 0;
   if (k == 1)
     return 1;
+
+  // general
   int a = 0, b = 1, ans = 0;
   for (int i = 2; i <= k; i++) {
     ans = a + b;
@@ -136,26 +181,58 @@ int getF(int k) {
   }
   return ans;
   // }
-  // // recursion:
-  // {
+}
+
+// X(n) = X(n-1) + X(n-2) ; X(1)= 1, X(0)= 0
+int getFR(int k, vector<int> &finish) {
+  // time complexity : O(N)
+
+  // exception
+  if (k == 0)
+    return 0;
+  if (k == 1)
+    return 1;
+
+  // general
+  if (finish[k] != -1)
+    return finish[k];
+
+  finish[k] = getFR(k - 1, finish) + getFR(k - 2, finish);
+
+  return finish[k];
+
+  // time complexity : O(2^N)
+  //
   //   if (k == 0)
   //     return 0;
   //   if (k == 1)
   //     return 1;
   //   return getF(k - 1) + getF(k - 2);
-  // }
 }
-vector<int> finish(MAX_N, -1);
-int getFR(int k) {
-  // recursion:
+
+
+
+int getFR2(int k, unordered_map<int, int>& memo) {
+  // time complexity : O(N)
+
+  // exception
   if (k == 0)
     return 0;
   if (k == 1)
     return 1;
-  if (finish[k] != -1)
-    return finish[k];
-  finish[k] = getF(k - 1) + getF(k - 2);
-  return finish[k];
+
+  // general
+  if(memo.find(k) != memo.end()) //O(1)
+  {
+    return memo[k];
+  }
+
+  int res = getFR2(k - 1, memo) + getFR2(k - 2, memo);
+  memo[k] = res;
+
+  return res;
+
+
 }
 
 void leetcode_fibonacii_seq() {
@@ -171,7 +248,31 @@ void leetcode_fibonacii_seq() {
 
   int k = 12;
   printf("X(%d)= %d\n", k, getF(k));
-  printf("X(%d)= %d\n", k, getFR(k));
+
+  /*
+    How to solve recursive problem (dynamic programming problem)?
+
+     Step 0*: Write polynomial function to describe the solution/ problem
+     Step 1: write "general" part based on your polynomial function
+     Step 2: write "exception" part
+     Step 3 (Optional) : memoization to reduce the time complexity
+                        - vector -> special case -> O(M)
+                        - hash table / Look up table -> O(1)
+
+     *) backtracking / top-down mindset / de-rank
+        X(k) = X(k-1) + X(k-2)
+        ^^^^   ^^^^^^    ^^^^^
+         k      k-1      k-2
+
+        Pincipal Component Analysis (PCA)
+  */
+
+  vector<int> finish(k + 1, -1);
+  printf("X(%d)= %d\n", k, getFR(k, finish));
+
+  unordered_map<int, int> memo;
+  printf("X(%d)= %d\n", k, getFR2(k, memo));
+
 }
 
 void basic_dynamic_memory_allocation() {
