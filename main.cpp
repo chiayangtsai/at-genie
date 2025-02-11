@@ -3,8 +3,8 @@
 #include <cstdlib>
 #include <iostream>
 #include <string>
-#include <vector>
 #include <unordered_map>
+#include <vector>
 
 // windows platform
 //  輔系 -> 轉系/雙主修 - 3月初3次考試 / 5月考4次
@@ -20,7 +20,7 @@ using namespace std;
 
 int main() {
 
-  int testID = 20;
+  int testID = 21;
 
   switch (testID) {
   case 0:
@@ -79,7 +79,7 @@ int main() {
     leetcode_fibonacii_seq();
     break;
   case 20:
-    basic_cstd_pair_unorderedmap ();
+    basic_cstd_pair_unorderedmap();
     break;
   case 21:
     leetcode_two_sum();
@@ -103,18 +103,46 @@ int main() {
 }
 
 void leetcode_two_sum() {
-  vector<int> data({1, 6, 5, 3, 9, 4, 3, 6});
+  vector<int> data({1, 6, 5, 3, 9, 4, 3, 5, 6});
   int sum = 10;
-
+  // method 1
+  {
+    unordered_map<int, vector<pair<int, int>>> memo;
+    for (int i = 0; i < data.size(); i++) {
+      for (int j = i + 1; j < data.size(); j++) {
+        int small = min(data[i], data[j]);
+        int large = max(data[i], data[j]);
+        int value = small + large;
+        if (memo[value].empty() || memo[value].back() != make_pair(small, large)) {
+          memo[value].push_back({small, large});
+        }
+      }
+    }
+    if (memo.find(sum) != memo.end()) {
+      for (auto p : memo[sum]) {
+        cout << p.first << " " << p.second << endl;
+      }
+    }
+  }
+  // method 2
+  {
+    unordered_map<int, int> memo;
+    for (int i = 0; i < data.size(); i++) {
+      int need = sum - data[i];
+      if (memo.find(need) != memo.end() && data[i] > need) {
+        cout << data[i] << " " << need << endl;
+      }
+      memo[data[i]] = i;
+    }
+  }
   // Q: print out the pair with sum = 9
   //    (6, 4) (1,9)
-  //    NOTE: Don't print out the repeated pair  
+  //    NOTE: Don't print out the repeated pair
 
-  //HW0210
-  //O(N^3)
-  //O(N^2) <== minimum requirement
-  //O(N) <== good job!
-  
+  // HW0210
+  // O(N^3)
+  // O(N^2) <== minimum requirement
+  // O(N) <== good job!
 }
 
 void basic_cstd_pair_unorderedmap() {
@@ -122,24 +150,23 @@ void basic_cstd_pair_unorderedmap() {
                           "Elly", "Kim",  "Hailey"};
   vector<int> sScore = {50, 20, 60, 40, 80, 100, 90};
 
-  //search
-  //vector/array :  O(N)
-  //look-up table:  O(1)
+  // search
+  // vector/array :  O(N)
+  // look-up table:  O(1)
 
-  unordered_map<string, int> sTable; //key , value
-  for(int i=0; i< sName.size(); i++){
-    sTable[ sName[i] ] = sScore[i];
+  unordered_map<string, int> sTable; // key , value
+  for (int i = 0; i < sName.size(); i++) {
+    sTable[sName[i]] = sScore[i];
   }
 
   // John 50
   // Jack 20
   //..
 
-  for(auto it = sTable.begin(); it != sTable.end();it++){
+  for (auto it = sTable.begin(); it != sTable.end(); it++) {
     cout << it->first << " " << it->second << endl;
   }
   cout << endl;
-
 
   //============  unordered_map =============================================//
   // https://cplusplus.com/reference/unordered_map/unordered_map/unordered_map/
@@ -148,14 +175,12 @@ void basic_cstd_pair_unorderedmap() {
   cout << sTable["John"] << endl;
 
   string key = "VK";
-  if( sTable.find(key) != sTable.end()){
+  if (sTable.find(key) != sTable.end()) {
     cout << sTable[key] << endl;
-  }
-  else //error control
+  } else // error control
   {
-    cout << key << " not found" << endl; 
+    cout << key << " not found" << endl;
   }
- 
 }
 
 int getF(int k) {
@@ -210,9 +235,7 @@ int getFR(int k, vector<int> &finish) {
   //   return getF(k - 1) + getF(k - 2);
 }
 
-
-
-int getFR2(int k, unordered_map<int, int>& memo) {
+int getFR2(int k, unordered_map<int, int> &memo) {
   // time complexity : O(N)
 
   // exception
@@ -222,7 +245,7 @@ int getFR2(int k, unordered_map<int, int>& memo) {
     return 1;
 
   // general
-  if(memo.find(k) != memo.end()) //O(1)
+  if (memo.find(k) != memo.end()) // O(1)
   {
     return memo[k];
   }
@@ -231,8 +254,6 @@ int getFR2(int k, unordered_map<int, int>& memo) {
   memo[k] = res;
 
   return res;
-
-
 }
 
 void leetcode_fibonacii_seq() {
@@ -272,7 +293,6 @@ void leetcode_fibonacii_seq() {
 
   unordered_map<int, int> memo;
   printf("X(%d)= %d\n", k, getFR2(k, memo));
-
 }
 
 void basic_dynamic_memory_allocation() {
