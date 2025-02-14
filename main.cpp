@@ -4,6 +4,7 @@
 #include <iostream>
 #include <string>
 #include <unordered_map>
+#include <unordered_set>
 #include <vector>
 
 // windows platform
@@ -20,7 +21,7 @@ using namespace std;
 
 int main() {
 
-  int testID = 21;
+  int testID = 23;
 
   switch (testID) {
   case 0:
@@ -78,14 +79,18 @@ int main() {
   case 19: // recursive
     leetcode_fibonacii_seq();
     break;
-  case 20:
+  case 20: // unordered_map
     basic_cstd_pair_unorderedmap();
     break;
-  case 21:
+  case 21: // unordered_set
     leetcode_two_sum();
     break;
-    // pair
-    // unordered_map
+  case 22: // sliding window
+    leetcode_lonest_substring_without_repeating();
+    break;
+  case 23:
+    basic_sort_usage();
+    break;
     //.sort()
     //  leetcode
     // digits processing - decimal, binary
@@ -103,38 +108,6 @@ int main() {
 }
 
 void leetcode_two_sum() {
-  vector<int> data({1, 6, 5, 3, 9, 4, 3, 5, 6});
-  int sum = 10;
-  // method 1
-  {
-    unordered_map<int, vector<pair<int, int>>> memo;
-    for (int i = 0; i < data.size(); i++) {
-      for (int j = i + 1; j < data.size(); j++) {
-        int small = min(data[i], data[j]);
-        int large = max(data[i], data[j]);
-        int value = small + large;
-        if (memo[value].empty() || memo[value].back() != make_pair(small, large)) {
-          memo[value].push_back({small, large});
-        }
-      }
-    }
-    if (memo.find(sum) != memo.end()) {
-      for (auto p : memo[sum]) {
-        cout << p.first << " " << p.second << endl;
-      }
-    }
-  }
-  // method 2
-  {
-    unordered_map<int, int> memo;
-    for (int i = 0; i < data.size(); i++) {
-      int need = sum - data[i];
-      if (memo.find(need) != memo.end() && data[i] > need) {
-        cout << data[i] << " " << need << endl;
-      }
-      memo[data[i]] = i;
-    }
-  }
   // Q: print out the pair with sum = 9
   //    (6, 4) (1,9)
   //    NOTE: Don't print out the repeated pair
@@ -143,6 +116,63 @@ void leetcode_two_sum() {
   // O(N^3)
   // O(N^2) <== minimum requirement
   // O(N) <== good job!
+
+  vector<int> data({1, 6, 5, 3, 9, 4, 3, 5, 6});
+  int sum = 10;
+  // method 1
+  {
+    // O(N^2)
+    // unordered_map<int, int> memo; //key: element , val: X
+    unordered_set<int> memo;
+
+    for (int i = 0; i < data.size(); i++) {
+      for (int j = i + 1; j < data.size(); j++) {
+        if (data[i] + data[j] != sum) // != sum
+          continue;
+
+        if (memo.find(data[i]) != memo.end()) // found O(1)
+          continue;
+
+        printf("%d %d\n", data[i], data[j]);
+
+        // memo[ data[i] ] = 0;
+        // memo[ data[j] ] = 0;
+        memo.insert(data[i]);
+        memo.insert(data[j]);
+      }
+    }
+
+    /*
+    unordered_map<int, vector<pair<int, int>>> memo;
+    for (int i = 0; i < data.size(); i++) {
+      for (int j = i + 1; j < data.size(); j++) {
+        int small = min(data[i], data[j]);
+        int large = max(data[i], data[j]);
+        int value = small + large;
+        if (memo[value].empty() || memo[value].back() != make_pair(small,
+    large)) { memo[value].push_back({small, large});
+        }
+      }
+    }
+    if (memo.find(sum) != memo.end()) {
+      for (auto p : memo[sum]) {
+        cout << p.first << " " << p.second << endl;
+      }
+    }
+    */
+  }
+  // method 2
+  printf("==== method 2 : O(N) ===\n");
+  {
+    unordered_map<int, int> memo;
+    for (int i = 0; i < data.size(); i++) {
+      int need = sum - data[i];
+      if (memo.find(need) != memo.end() && data[i] >= need) {
+        cout << data[i] << " " << need << endl;
+      }
+      memo[data[i]] = i;
+    }
+  }
 }
 
 void basic_cstd_pair_unorderedmap() {
@@ -396,6 +426,39 @@ void basic_pair_usage() {
   // TBV : sort()
 }
 
+bool myCompare(int& left, int& right){
+  return (left > right);
+}
+
+void basic_sort_usage() {
+
+  //time complexity : O(NlogN)
+  //
+  // basic
+  {
+    vector<int> a = {5, 4, 1, 3, 2};
+    sort(a.begin(), a.end());
+    for (auto &i : a) {
+      cout << i << " ";
+    }
+    cout << endl;
+  }
+  // customized
+  {
+    vector<int> a = {5, 4, 1, 3, 2};
+    sort(a.begin(), a.end(), myCompare);
+
+    for (auto &i : a) {
+      cout << i << " ";
+    }
+    cout << endl;
+  }
+
+  //TBV
+  
+  // speed up
+}
+
 void basic_struct_usage() {
   vector<string> sName = {"John", "Jack", "Topher", "Ku",
                           "Elly", "Kim",  "Hailey"};
@@ -533,6 +596,29 @@ void leetcode_letters_histogram() {
     for (char c = 'a'; c <= 'z'; c++) {
       if (frequency[c - 'a'] > 0) {
         cout << c << " : " << frequency[c - 'a'] << '\n';
+      }
+    }
+  }
+
+  printf("=== unordered_map ====");
+  {
+    string word = "as;lkdjfha.. al;kshjdf;laikhs;dflk jkl;j!";
+
+    unordered_map<char, int> memo; // key : char, accumulation
+    // O(N)
+    for (auto &c : word) {
+      if (c >= 'a' && c <= 'z') {
+        if (memo.find(c) != memo.end())
+          memo[c]++;
+        else
+          memo[c] = 1;
+      }
+    }
+
+    // O(1)
+    for (char c = 'a'; c <= 'z'; c++) {
+      if (memo[c] > 0) {
+        cout << c << " : " << memo[c] << '\n';
       }
     }
   }
@@ -1219,4 +1305,56 @@ void leetcode_remove_duplicate_from_sorted_array() {
     printf("%d ", ir);
   printf("\n");
   printf("ans: 0,1,2,3,4 \n");
+}
+
+int lengthOfLongestSubstring(string s) {
+  // HW0213
+  return 0; // TBD
+}
+
+void leetcode_lonest_substring_without_repeating() {
+  // https://leetcode.com/problems/longest-substring-without-repeating-characters/description/
+
+  /*
+  Given a string s, find the length of the longest substring without repeating
+characters.
+
+
+
+Example 1:
+
+Input: s = "abcabcbb"
+Output: 3
+Explanation: The answer is "abc", with the length of 3.
+Example 2:
+
+Input: s = "bbbbb"
+Output: 1
+Explanation: The answer is "b", with the length of 1.
+Example 3:
+
+Input: s = "pwwkew"
+Output: 3
+Explanation: The answer is "wke", with the length of 3.
+Notice that the answer must be a substring, "pwke" is a subsequence and not a
+substring.
+
+
+Constraints:
+
+0 <= s.length <= 5 * 104
+s consists of English letters, digits, symbols and spaces.
+
+
+  */
+  string s;
+
+  s = "abcabcbb";
+  printf("res= %d (ans: 3)\n", lengthOfLongestSubstring(s));
+
+  s = "bbbbb";
+  printf("res= %d (ans: 1)\n", lengthOfLongestSubstring(s));
+
+  s = "pwwkew";
+  printf("res= %d (ans: 3)\n", lengthOfLongestSubstring(s));
 }

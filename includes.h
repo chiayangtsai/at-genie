@@ -16,3 +16,5 @@ void basic_pair_usage();
 void leetcode_fibonacii_seq();
 void basic_cstd_pair_unorderedmap();
 void leetcode_two_sum();
+void leetcode_lonest_substring_without_repeating();
+void basic_sort_usage();
