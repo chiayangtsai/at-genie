@@ -21,7 +21,7 @@ using namespace std;
 
 int main() {
 
-  int testID = 23;
+  int testID = 25;
 
   switch (testID) {
   case 0:
@@ -89,14 +89,16 @@ int main() {
     leetcode_lonest_substring_without_repeating();
     break;
   case 23:
+    leetcode_alternating_strings();
+    break;
+  case 24:
     basic_sort_usage();
     break;
-    //.sort()
-    //  leetcode
-    // digits processing - decimal, binary
+  case 25:
+    basic_digit_representation();
+    break;
     // map
     // recursive (dynamic programming - easy)
-    //  leetcode
     // binary tree - breath-frist creation
 
   default:
@@ -105,6 +107,44 @@ int main() {
   }
 
   return 0;
+}
+
+void printBinary(int a)
+{
+  //20 =>  0000 0000 0000 0000 0000 0000 0001 0100 
+  //HW0222
+}
+
+
+void basic_digit_representation() {
+  //----- decimal -------
+  {
+    int a = 5432;
+    // digit : a % 10
+    // right shift : a / 10
+  }
+  //----- binary --------
+  {
+    int a = 20; //  16 + 4 => 2^4 + 2^2 =>   10100
+    // digt : a % 2 =>  a & 1 (bitwise operation)
+    // right shift : a/2  =>  a >> 1
+
+    printf("%d\n", a >> 1);
+    //10100 => 1010 
+    printf("%d\n", a << 1);
+    //10100 => 101000
+  }
+
+  printf("print out the binary presentation \n");
+  {
+    //1 byte = 8 bits
+    //int : 4 bytes = 32 bits
+    int a = 20;
+    // 0000 0000 0000 0000 0000 0000 0001 0100  <== 20
+    printBinary(a);
+    
+  }
+  
 }
 
 void leetcode_two_sum() {
@@ -422,19 +462,19 @@ void basic_pair_usage() {
     // data.push_back(pair<string, int>(sName[i], sScore[i])); <== This is OKAY
     data.push_back(make_pair(sName[i], sScore[i]));
   }
-
-  // TBV : sort()
 }
 
-bool myCompare(int& left, int& right){
-  return (left > right);
+static bool myCompare(int &left, int &right) { return (left > right); }
+
+static bool ccompare(pair<string, int> &p1, pair<string, int> &p2) {
+  return p1.second > p2.second;
 }
 
 void basic_sort_usage() {
 
-  //time complexity : O(NlogN)
+  // time complexity : O(NlogN)
   //
-  // basic
+  //  basic
   {
     vector<int> a = {5, 4, 1, 3, 2};
     sort(a.begin(), a.end());
@@ -454,9 +494,45 @@ void basic_sort_usage() {
     cout << endl;
   }
 
-  //TBV
-  
-  // speed up
+  printf("--- sorting objects -----\n");
+  {
+    vector<string> sName = {"John", "Jack", "Topher", "Ku",
+                            "Elly", "Kim",  "Hailey"};
+    vector<int> sScore = {90, 97, 50, 65, 70, 100, 45};
+
+    vector<pair<string, int>> data;
+    for (int i = 0; i < sName.size(); i++) {
+      data.push_back(make_pair(sName[i], sScore[i]));
+    }
+
+    for (auto &x : data) {
+      cout << x.first << " " << x.second << endl;
+    }
+    printf("--------------\n");
+
+    // Q: sort data using score (大->小)
+    sort(data.begin(), data.end(), ccompare);
+    for (auto &x : data) {
+      cout << x.first << " " << x.second << endl;
+    }
+
+    printf("--------------\n");
+
+    auto init_compare = [](pair<string, int> &p1,
+                           pair<string, int> &p2) -> bool {
+      return p1.first.front() < p2.first.front();
+    };
+    sort(data.begin(), data.end(), init_compare);
+
+    // Q: sort data using initial of names (A->Z)
+    // sort(data.begin(), data.end(),
+    //   [](pair<string, int> &p1, pair<string, int> &p2){ return
+    //   p1.first.front() < p2.first.front();  } );
+  }
+
+  // speed up -
+  //  C : static (optinal)
+  //  C++ : if in class, static is required.
 }
 
 void basic_struct_usage() {
@@ -1309,7 +1385,18 @@ void leetcode_remove_duplicate_from_sorted_array() {
 
 int lengthOfLongestSubstring(string s) {
   // HW0213
-  return 0; // TBD
+  unordered_map<char, int> last;
+  int ans = 0;
+  int r = 0;
+  // time complexity O(N)
+  for (int l = 0; r < s.size(); r++) {
+    if (last.find(s[r]) != last.end()) {
+      l = max(l, last[s[r]] + 1);
+    }
+    ans = max(ans, r - l + 1);
+    last[s[r]] = r;
+  }
+  return ans;
 }
 
 void leetcode_lonest_substring_without_repeating() {
@@ -1357,4 +1444,55 @@ s consists of English letters, digits, symbols and spaces.
 
   s = "pwwkew";
   printf("res= %d (ans: 3)\n", lengthOfLongestSubstring(s));
+}
+
+int getMaxAlternatingStringLength(int k, string in) {
+  // HW0222: Target O(N)
+  return -1;
+}
+
+void leetcode_alternating_strings() {
+
+  // https://zerojudge.tw/ShowProblem?problemid=c462
+  // APCS 2017
+  //
+  // k-alternating string:
+  //          StRiNg => 1-alternating string
+  //          heLLow => 2-alternating string
+  //          aBBaaa => NOT alternating string
+  //          aaaAAbbCCCC => NOT alternating string
+
+  // Q: Given k and a string, find the maximum sub-string length which matches
+  // k-alternating string condition. Example:
+  //       Given k = 2, string = "aBBaaa" => the maximum k-alternating string is
+  //       BBaa, Answer:  4 Given k= 1, string = "BaBaBB" => the maximum
+  //       k-alternating string is BaBaB, Anser : 5
+
+  string in;
+  int k;
+  int maxLen;
+
+  k = 1;
+  in = "aBBdaaa";
+  maxLen = getMaxAlternatingStringLength(k, in);
+  printf("k=%d, string is %s => max len = %d (ans: 2)\n", k, in.c_str(),
+         maxLen);
+
+  k = 3;
+  in = "DDaasAAbbCC";
+  maxLen = getMaxAlternatingStringLength(k, in);
+  printf("k=%d, string is %s => max len = %d (ans: 3)\n", k, in.c_str(),
+         maxLen);
+
+  k = 2;
+  in = "aafAXbbCDCCC";
+  maxLen = getMaxAlternatingStringLength(k, in);
+  printf("k=%d, string is %s => max len = %d (ans: 8)\n", k, in.c_str(),
+         maxLen);
+
+  k = 3;
+  in = "DDaaAAbbCC";
+  maxLen = getMaxAlternatingStringLength(k, in);
+  printf("k=%d, string is %s => max len = %d (ans: 0)\n", k, in.c_str(),
+         maxLen);
 }

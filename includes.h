@@ -18,3 +18,5 @@ void basic_cstd_pair_unorderedmap();
 void leetcode_two_sum();
 void leetcode_lonest_substring_without_repeating();
 void basic_sort_usage();
+void leetcode_alternating_strings();
+void basic_digit_representation();
