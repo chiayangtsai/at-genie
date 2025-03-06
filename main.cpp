@@ -21,7 +21,7 @@ using namespace std;
 
 int main() {
 
-  int testID = 25;
+  int testID = 20;
 
   switch (testID) {
   case 0:
@@ -79,8 +79,8 @@ int main() {
   case 19: // recursive
     leetcode_fibonacii_seq();
     break;
-  case 20: // unordered_map
-    basic_cstd_pair_unorderedmap();
+  case 20: // unordered_map, map  : //TBV
+    basic_cstd_pair_unorderedmap_map();
     break;
   case 21: // unordered_set
     leetcode_two_sum();
@@ -97,9 +97,28 @@ int main() {
   case 25:
     basic_digit_representation();
     break;
+  case 26:
+    leetcode_bits_reversal();
+    break;
+  case 27:
+    leetcode_revert_integer();
+    break;
+  case 28:
+    leetcode_even_odd_diff();
+    break;
     // map
+    // leetcode 3-5
     // recursive (dynamic programming - easy)
-    // binary tree - breath-frist creation
+    // binary tree - breath-frist creation (BF)
+  case 50:
+    basic_binary_concept();
+    break;
+
+    //------- middle level ------------
+    // binary tree - DF creation, BFS, DFS
+    // efficeint sort - heap sort, quick sort, merge sort
+    // dynamic programming - (easy-mid)
+    // linked list..
 
   default:
     cout << "not a supported testID" << testID << endl;
@@ -109,12 +128,92 @@ int main() {
   return 0;
 }
 
-void printBinary(int a)
-{
-  //20 =>  0000 0000 0000 0000 0000 0000 0001 0100 
-  //HW0222
+
+void basic_binary_concept(){
+  vector<int> vals= {8, 5, 3, 2, 9, 1};
+  //                 0  1  2  3  4  5
+
+  // 1D -> Tree
+  
+  // Breadth-first / level-first binary tree
+  /*
+         8(0)                d= 0
+        /      \
+       5(1)     3(2)         d= 1
+      /   \      /   \
+    2(3) 9(4)  1(5)          d= 2
+
+    left node index = 2* parent node index +1
+    right node index = 2* parent node index + 2
+
+    //balanced tree : | left tree depth - right tree depth | <= 1
+    //complete tree : maximum depth number = log2( num of data)
+    
+*/
+//TBV : binary tree creation BF
+  
 }
 
+void printBinary(int a) {
+  // 20 =>  0000 0000 0000 0000 0000 0000 0001 0100
+  // HW0222
+  int v[32] = {0};
+  for (int i = 0; i < 32; i++) {
+    v[i] = a & 1;
+    a = a >> 1;
+  }
+  int count = 0;
+  for (int i = 31; i >= 0; i--) {
+    count++;
+    cout << v[i];
+    if (count == 4) {
+      cout << " ";
+      count = 0;
+    }
+  }
+}
+
+int reverse_int_value(int a) {
+  /*
+    1011
+  & 0111
+  _______
+    0011 
+
+    1011
+  | 0111
+  _______
+    1111 
+  
+   
+  */
+
+  
+  int ans = 0;
+  for (int i = 0; i < 32; i++) {
+    int d = a & 1;
+    
+    ans = (ans << 1) | d;
+    
+    a = a >> 1;
+  }
+
+  //2's compliment <-- encourge to read
+
+  return ans;
+}
+
+void leetcode_bits_reversal() {
+  int a = 27; // 32-bit
+  printBinary(a);
+  // 0000 0000 0000 0000 0000 0000 0001 1011
+  // after reversal
+  // 1101 1000 0000 0000 0000 0000 0000 0000
+
+  int res = reverse_int_value(a);
+  printf("%d => %d\n", a, res);
+  printBinary(res);
+}
 
 void basic_digit_representation() {
   //----- decimal -------
@@ -130,22 +229,62 @@ void basic_digit_representation() {
     // right shift : a/2  =>  a >> 1
 
     printf("%d\n", a >> 1);
-    //10100 => 1010 
+    // 10100 => 1010
     printf("%d\n", a << 1);
-    //10100 => 101000
+    // 10100 => 101000
   }
 
   printf("print out the binary presentation \n");
   {
-    //1 byte = 8 bits
-    //int : 4 bytes = 32 bits
+    // 1 byte = 8 bits
+    // int : 4 bytes = 32 bits
     int a = 20;
     // 0000 0000 0000 0000 0000 0000 0001 0100  <== 20
     printBinary(a);
-    
   }
-  
 }
+
+int revertInteger(int num) { 
+  //HW0305
+  // NOTE: don't use string
+  return -1; 
+}
+
+void leetcode_revert_integer() {
+  // https://zerojudge.tw/ShowProblem?problemid=a038
+
+  int num = 12345;
+  num = revertInteger(num);
+  printf("reverted number = %d (ans : 54321)\n", num);
+}
+
+int funcEvenOddDiff(int x)
+{
+  //HW0305
+  return -1;
+}
+void leetcode_even_odd_diff()
+{
+  // from zero judge - APCS
+  // https://zerojudge.tw/ShowProblem?problemid=c290
+  /*
+  將一個十進位正整數的奇數位數的和稱為A ，偶數位數的和稱為B，則A與B的絕對差值 |A
+  －B| 稱為這個正整數的秘密差。
+
+  例如： 263541 的奇數位和 A = 6+5+1 =12，偶數位的和 B = 2+3+4 = 9 ，所以 263541
+  的秘密差是 |12 －9|= 3 。
+
+  給定一個 十進位正整數 X，請找出 X的秘密差。
+  */
+  int X = 263541; //  |(2+3+4) - (6+5+1)| = 3
+  int diff = funcEvenOddDiff(X);
+  printf("diff =%d (ans : 3)\n", diff);
+
+  X = 131; // |(1+1) -3| = 1
+  diff = funcEvenOddDiff(X);
+  printf("diff =%d (ans : 1)\n", diff);
+}
+
 
 void leetcode_two_sum() {
   // Q: print out the pair with sum = 9
@@ -215,7 +354,7 @@ void leetcode_two_sum() {
   }
 }
 
-void basic_cstd_pair_unorderedmap() {
+void basic_cstd_pair_unorderedmap_map() {
   vector<string> sName = {"John", "Jack", "Topher", "Ku",
                           "Elly", "Kim",  "Hailey"};
   vector<int> sScore = {50, 20, 60, 40, 80, 100, 90};
@@ -1446,9 +1585,53 @@ s consists of English letters, digits, symbols and spaces.
   printf("res= %d (ans: 3)\n", lengthOfLongestSubstring(s));
 }
 
+int alter(char c) {
+  if (c <= 'z' && c >= 'a')
+    return 0;
+  else
+    return 1;
+}
 int getMaxAlternatingStringLength(int k, string in) {
   // HW0222: Target O(N)
-  return -1;
+
+  int alt[in.size()];
+  for (int i = 0; i < in.size(); i++) {
+    alt[i] = alter(in[i]);
+  }
+  int sum = 1;
+  vector<int> num;
+  for (int i = 1; i < in.size(); i++) {
+    if (alt[i] == alt[i - 1]) {
+      sum++;
+    } else {
+      num.push_back(sum);
+      sum = 1;
+    }
+  }
+  num.push_back(sum);
+  int ans = 0;
+  int r = 0;
+  int l;
+  int nl, nr;
+  for (l = 0; r < num.size(); r++) {
+    if (num[r] != k) {
+      l += 1;
+    }
+    if ((r - l + 1) > ans) {
+      ans = r - l + 1;
+      nr = r;
+      nl = l;
+    }
+  }
+  int Ans = ans;
+  if (num[nl - 1] >= k && nl >= 1) {
+    Ans += 1;
+  }
+
+  if (num[nr + 1] >= k && nr < num.size() - 1) {
+    Ans += 1;
+  }
+  return Ans * k;
 }
 
 void leetcode_alternating_strings() {
