@@ -21,7 +21,7 @@ using namespace std;
 
 int main() {
 
-  int testID = 20;
+  int testID = 28;
 
   switch (testID) {
   case 0:
@@ -128,13 +128,12 @@ int main() {
   return 0;
 }
 
-
-void basic_binary_concept(){
-  vector<int> vals= {8, 5, 3, 2, 9, 1};
+void basic_binary_concept() {
+  vector<int> vals = {8, 5, 3, 2, 9, 1};
   //                 0  1  2  3  4  5
 
   // 1D -> Tree
-  
+
   // Breadth-first / level-first binary tree
   /*
          8(0)                d= 0
@@ -148,10 +147,9 @@ void basic_binary_concept(){
 
     //balanced tree : | left tree depth - right tree depth | <= 1
     //complete tree : maximum depth number = log2( num of data)
-    
+
 */
-//TBV : binary tree creation BF
-  
+  // TBV : binary tree creation BF
 }
 
 void printBinary(int a) {
@@ -178,27 +176,26 @@ int reverse_int_value(int a) {
     1011
   & 0111
   _______
-    0011 
+    0011
 
     1011
   | 0111
   _______
-    1111 
-  
-   
+    1111
+
+
   */
 
-  
   int ans = 0;
   for (int i = 0; i < 32; i++) {
     int d = a & 1;
-    
+
     ans = (ans << 1) | d;
-    
+
     a = a >> 1;
   }
 
-  //2's compliment <-- encourge to read
+  // 2's compliment <-- encourge to read
 
   return ans;
 }
@@ -244,10 +241,16 @@ void basic_digit_representation() {
   }
 }
 
-int revertInteger(int num) { 
-  //HW0305
-  // NOTE: don't use string
-  return -1; 
+int revertInteger(int num) {
+  // HW0305
+  //  NOTE: don't use string
+  int ans = 0;
+  while (num > 0) {
+    int a = num % 10;
+    ans = ans * 10 + a;
+    num /= 10;
+  }
+  return ans;
 }
 
 void leetcode_revert_integer() {
@@ -258,13 +261,28 @@ void leetcode_revert_integer() {
   printf("reverted number = %d (ans : 54321)\n", num);
 }
 
-int funcEvenOddDiff(int x)
-{
-  //HW0305
-  return -1;
+int funcEvenOddDiff(int x) {
+  // HW0305
+  bool flag = true;
+  int a = 0;
+  int b = 0;
+  while (x > 0) {
+    if (flag) {
+      int ans = x % 10;
+      a += ans;
+      x /= 10;
+      flag = false;
+    }
+    if (!flag) {
+      int ans = x % 10;
+      b += ans;
+      x /= 10;
+      flag = true;
+    }
+  }
+  return abs(a - b);
 }
-void leetcode_even_odd_diff()
-{
+void leetcode_even_odd_diff() {
   // from zero judge - APCS
   // https://zerojudge.tw/ShowProblem?problemid=c290
   /*
@@ -284,7 +302,6 @@ void leetcode_even_odd_diff()
   diff = funcEvenOddDiff(X);
   printf("diff =%d (ans : 1)\n", diff);
 }
-
 
 void leetcode_two_sum() {
   // Q: print out the pair with sum = 9
@@ -916,7 +933,6 @@ void leetcode_sorting_two_sorted_lists() {
       vector<int> *x = &a;
       if (a.empty()) {
         x = &b;
-      } else if (b.empty()) {
       } else if (b.front() < a.front()) {
         x = &b;
       }
