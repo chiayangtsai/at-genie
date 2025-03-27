@@ -15,6 +15,42 @@
 // geeksforgeeks: wikipedia
 // stackoverflow: Q&A
 
+/*
+  How to solve recursive problem (dynamic programming problem)?
+
+   Step 0*: Write polynomial function to describe the solution/ problem
+   Step 1: write "general" part based on your polynomial function
+   Step 2: write "exception" part
+   Step 3 (Optional) : memoization to reduce the time complexity
+                      - vector -> special case -> O(M)
+                      - hash table / Look up table -> O(1)
+
+   *) backtracking / top-down mindset / de-rank
+      X(k) = X(k-1) + X(k-2)
+      ^^^^   ^^^^^^    ^^^^^
+       k      k-1      k-2
+
+      Pincipal Component Analysis (PCA)
+
+
+    (1) direct inheritance
+       X(k) = X(k-1) + X(k-2)
+       => (short cut) greedy algorithm (bottom-up)
+    
+    (2) ordered or unordered set
+      F(X) =   max { F(X0), F(X1)....}
+      F(X) = min( F(X0)->F(X1)....   )
+       => (short cut) linked list => (short cut) hash table
+
+    (3) conditional recursive
+      F(X) <---> g(X) -> True/ False
+      True => F(X) = F(X0) + F(X1)
+      False => F(X) = max(F(X0), F(X1))
+      
+*/
+
+
+
 using namespace std;
 
 #include "includes.h"
@@ -261,7 +297,41 @@ void leetcode_revert_integer() {
   printf("reverted number = %d (ans : 54321)\n", num);
 }
 
+#define EVEN_ODD_DIFF_ALTER 1
+
+
 int funcEvenOddDiff(int x) {
+
+#if EVEN_ODD_DIFF_ALTER
+
+  // | (a0+a1+a2....)  - (b0+b1+b2....)|
+  // = | (a0-b0)+ (a1-b1)....  |
+  int diff =0;
+  while(x){
+    diff += x%10;
+    x/=10;
+
+    diff -= x%10;
+    x/=10;    
+  }
+  return diff >0? diff : (-diff);
+
+  /*
+  int a =0, b=0;
+  while(x){
+    a += x % 10;
+    x/=10;
+
+
+    b+= x%10;
+    x/=10;    
+  }
+
+  int diff = a-b;
+  return diff >0? diff : (-diff);
+  */
+  
+#else
   // HW0305
   bool flag = true;
   int a = 0;
@@ -281,6 +351,8 @@ int funcEvenOddDiff(int x) {
     }
   }
   return abs(a - b);
+#endif
+  
 }
 void leetcode_even_odd_diff() {
   // from zero judge - APCS
@@ -496,23 +568,6 @@ void leetcode_fibonacii_seq() {
   int k = 12;
   printf("X(%d)= %d\n", k, getF(k));
 
-  /*
-    How to solve recursive problem (dynamic programming problem)?
-
-     Step 0*: Write polynomial function to describe the solution/ problem
-     Step 1: write "general" part based on your polynomial function
-     Step 2: write "exception" part
-     Step 3 (Optional) : memoization to reduce the time complexity
-                        - vector -> special case -> O(M)
-                        - hash table / Look up table -> O(1)
-
-     *) backtracking / top-down mindset / de-rank
-        X(k) = X(k-1) + X(k-2)
-        ^^^^   ^^^^^^    ^^^^^
-         k      k-1      k-2
-
-        Pincipal Component Analysis (PCA)
-  */
 
   vector<int> finish(k + 1, -1);
   printf("X(%d)= %d\n", k, getFR(k, finish));
@@ -761,7 +816,7 @@ void leetcode_letters_histogram() {
   // The optimized time complexity : O(N)
   //  // HW0126
 
-  // method 1
+  // method 1 : O(NlogN)
   int a = 6;
 
   {
@@ -789,7 +844,7 @@ void leetcode_letters_histogram() {
     }
   }
 
-  // method 2
+  // method 2 : O(NlogN)
   {
     string word = "as;lkdjfha.. al;kshjdf;laikhs;dflk jkl;j!";
     vector<char> collect;
@@ -813,7 +868,7 @@ void leetcode_letters_histogram() {
     }
   }
   {
-    // method 3
+    // method 3 : O(N) : KES algorithm 
     string word = "as;lkdjfha.. al;kshjdf;laikhs;dflk jkl;j!";
     int frequency[26] = {0};
 
@@ -1554,6 +1609,24 @@ int lengthOfLongestSubstring(string s) {
   return ans;
 }
 
+int lengthOfLongestSubstringKES(string s) {
+  //HW0327 : KES algorithm
+
+  /*
+     vector<int> last(26)
+        index
+     a -> 0 -> last appeared index
+     b -> 1 
+     c -> 2
+  
+  */
+  
+  return -1; //TBD
+}
+
+
+
+
 void leetcode_lonest_substring_without_repeating() {
   // https://leetcode.com/problems/longest-substring-without-repeating-characters/description/
 
@@ -1591,6 +1664,7 @@ s consists of English letters, digits, symbols and spaces.
   */
   string s;
 
+  printf("---- unordered_map --------\n");
   s = "abcabcbb";
   printf("res= %d (ans: 3)\n", lengthOfLongestSubstring(s));
 
@@ -1599,6 +1673,18 @@ s consists of English letters, digits, symbols and spaces.
 
   s = "pwwkew";
   printf("res= %d (ans: 3)\n", lengthOfLongestSubstring(s));
+
+  printf("---- unordered_map --------\n");
+  s = "abcabcbb";
+  printf("res= %d (ans: 3)\n", lengthOfLongestSubstringKES(s));
+
+  s = "bbbbb";
+  printf("res= %d (ans: 1)\n", lengthOfLongestSubstringKES(s));
+
+  s = "pwwkew";
+  printf("res= %d (ans: 3)\n", lengthOfLongestSubstringKES(s));
+
+  
 }
 
 int alter(char c) {
