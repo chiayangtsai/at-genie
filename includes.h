@@ -24,3 +24,6 @@ void leetcode_bits_reversal();
 void leetcode_revert_integer();
 void leetcode_even_odd_diff();
 void basic_binary_concept();
+void leetcode_functionParsing();
+void basic_binaryTree_BF_create();
+

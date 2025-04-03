@@ -8,7 +8,7 @@
 #include <vector>
 
 // windows platform
-//  輔系 -> 轉系/雙主修 - 3月初3次考試 / 5月考4次
+//  輔系 -> 轉系/雙主修 - 3月初2次考試 / 5月考4次
 
 //  How to google and find your answers?
 // cplusplus: dictionary
@@ -36,7 +36,7 @@
     (1) direct inheritance
        X(k) = X(k-1) + X(k-2)
        => (short cut) greedy algorithm (bottom-up)
-    
+
     (2) ordered or unordered set
       F(X) =   max { F(X0), F(X1)....}
       F(X) = min( F(X0)->F(X1)....   )
@@ -46,10 +46,8 @@
       F(X) <---> g(X) -> True/ False
       True => F(X) = F(X0) + F(X1)
       False => F(X) = max(F(X0), F(X1))
-      
+
 */
-
-
 
 using namespace std;
 
@@ -57,7 +55,7 @@ using namespace std;
 
 int main() {
 
-  int testID = 28;
+  int testID = 22;
 
   switch (testID) {
   case 0:
@@ -142,12 +140,19 @@ int main() {
   case 28:
     leetcode_even_odd_diff();
     break;
-    // map
-    // leetcode 3-5
-    // recursive (dynamic programming - easy)
+  case 29:
+    leetcode_functionParsing();
+    break;
+    // (SKIP) map
+    // leetcode 150 : array/list, easy - medium (3-week) 4/30
+    // (SKIP)leetcode 3-5
+    // (BYPASS) recursive (dynamic programming - easy)
     // binary tree - breath-frist creation (BF)
   case 50:
     basic_binary_concept();
+    break;
+  case 51:
+    basic_binaryTree_BF_create();
     break;
 
     //------- middle level ------------
@@ -166,11 +171,13 @@ int main() {
 
 void basic_binary_concept() {
   vector<int> vals = {8, 5, 3, 2, 9, 1};
-  //                 0  1  2  3  4  5
+  //                  0  1  2  3  4  5
 
+  // Linked List - Graph
+  //
   // 1D -> Tree
 
-  // Breadth-first / level-first binary tree
+  // Breadth-first (BF) / level-first binary tree
   /*
          8(0)                d= 0
         /      \
@@ -178,14 +185,143 @@ void basic_binary_concept() {
       /   \      /   \
     2(3) 9(4)  1(5)          d= 2
 
+
+
     left node index = 2* parent node index +1
     right node index = 2* parent node index + 2
+
 
     //balanced tree : | left tree depth - right tree depth | <= 1
     //complete tree : maximum depth number = log2( num of data)
 
 */
-  // TBV : binary tree creation BF
+
+  /*
+      Trie :
+
+          8(0)
+         /   |    \
+      5(1)   3(2)   2(3)
+     /  |  \
+  9(4) 1(5)
+
+
+  */
+}
+
+struct STreeNode {
+  int val;
+  STreeNode *left;
+  STreeNode *right;
+
+  STreeNode() {
+    val = -1;
+    left = nullptr;
+    right = nullptr;
+  }
+
+  STreeNode(int x) {
+    val = x;
+    left = nullptr;
+    right = nullptr;
+  }
+};
+
+void basic_binaryTree_BF_create() {
+  vector<int> val = {8, 5, 3, 2, 9, 1};
+  //                  0  1  2  3  4  5
+
+  // 1D -> Tree
+
+  // Breadth-first (BF) / level-first binary tree
+  /*
+         8(0)                d= 0
+        /      \
+       5(1)     3(2)         d= 1
+      /   \      /   \
+    2(3) 9(4)  1(5)          d= 2
+  */
+
+  cout << "-- naive approach- NOT SUGGESTED --" << endl;
+  /*
+  STreeNode* tree = new STreeNode(val[0]);
+  tree->left = new STreeNode(val[1]);
+  tree->right = new STreeNode(val[2]);
+  ....
+  */
+
+  cout << "-- better approach- NOT SUGGESTED --" << endl;
+  /*
+        tree
+        /  \
+
+       /\
+
+  */
+  {
+    vector<STreeNode *> tree(val.size());
+
+    tree[0] = new STreeNode(val[0]);
+    for (int i = 1; i < val.size(); i++) {
+      tree[i] = new STreeNode(val[i]);
+      int parentIdx = (i - 1) / 2;
+      if (i % 2)
+        tree[parentIdx]->left = tree[i];
+      else
+        tree[parentIdx]->right = tree[i];
+    }
+    for (int i = 0; i < tree.size(); i++) {
+      delete tree[i];
+    }
+  }
+
+  cout << "-- best approach---" << endl;
+  {
+    //mange your memory in "stack"
+    vector<STreeNode> nodes(val.size());
+
+    /*
+       -1   -1     ......
+       /\    /\ 
+    
+    */
+    //HW0403 create BF binary tree 
+    
+    
+  }
+}
+
+class CFuncParsing {
+public:
+  int solveFunctions(string paramStr) {
+    // HW0330
+    return -1;
+  }
+};
+
+void leetcode_functionParsing() {
+  /*
+   𝑓(𝑥) = 2𝑥 – 3
+   𝑔(𝑥, 𝑦) = 2𝑥 + 𝑦 – 7
+   ℎ(𝑥, 𝑦, 𝑧) = 3𝑥 – 2𝑦 + 𝑧
+
+   input string = {h f 5 g 3 4 3}, "space" is inserted between two consecutive
+   parameters, ℎ(𝑓(5), 𝑔(3, 4), 3) = ℎ(7, 3, 3) = 18
+
+   //Dynamic Programming (top-down): backtracking h-> f 5 g 3 4 3
+   //greedy algorithm (bottom-up): h f 5 g 3 4 3
+
+   APCS... 201X
+
+  */
+  CFuncParsing solDerived;
+  CFuncParsing *sol = &solDerived;
+
+  string s;
+  s = "h f 5 g 3 4 3";
+  printf("%d (ans = 18)\n", sol->solveFunctions(s));
+  s = "f f f 2"; // f(f(f(2)))
+  printf("%d (ans = -5)\n", sol->solveFunctions(s));
 }
 
 void printBinary(int a) {
@@ -299,22 +435,21 @@ void leetcode_revert_integer() {
 
 #define EVEN_ODD_DIFF_ALTER 1
 
-
 int funcEvenOddDiff(int x) {
 
 #if EVEN_ODD_DIFF_ALTER
 
   // | (a0+a1+a2....)  - (b0+b1+b2....)|
   // = | (a0-b0)+ (a1-b1)....  |
-  int diff =0;
-  while(x){
-    diff += x%10;
-    x/=10;
+  int diff = 0;
+  while (x) {
+    diff += x % 10;
+    x /= 10;
 
-    diff -= x%10;
-    x/=10;    
+    diff -= x % 10;
+    x /= 10;
   }
-  return diff >0? diff : (-diff);
+  return diff > 0 ? diff : (-diff);
 
   /*
   int a =0, b=0;
@@ -324,13 +459,13 @@ int funcEvenOddDiff(int x) {
 
 
     b+= x%10;
-    x/=10;    
+    x/=10;
   }
 
   int diff = a-b;
   return diff >0? diff : (-diff);
   */
-  
+
 #else
   // HW0305
   bool flag = true;
@@ -352,7 +487,6 @@ int funcEvenOddDiff(int x) {
   }
   return abs(a - b);
 #endif
-  
 }
 void leetcode_even_odd_diff() {
   // from zero judge - APCS
@@ -567,7 +701,6 @@ void leetcode_fibonacii_seq() {
 
   int k = 12;
   printf("X(%d)= %d\n", k, getF(k));
-
 
   vector<int> finish(k + 1, -1);
   printf("X(%d)= %d\n", k, getFR(k, finish));
@@ -868,7 +1001,7 @@ void leetcode_letters_histogram() {
     }
   }
   {
-    // method 3 : O(N) : KES algorithm 
+    // method 3 : O(N) : KES algorithm
     string word = "as;lkdjfha.. al;kshjdf;laikhs;dflk jkl;j!";
     int frequency[26] = {0};
 
@@ -1610,22 +1743,19 @@ int lengthOfLongestSubstring(string s) {
 }
 
 int lengthOfLongestSubstringKES(string s) {
-  //HW0327 : KES algorithm
+  // HW0327 : KES algorithm
 
-  /*
-     vector<int> last(26)
-        index
-     a -> 0 -> last appeared index
-     b -> 1 
-     c -> 2
-  
-  */
-  
-  return -1; //TBD
+  vector<int> last(128, -1);
+  int ans = 1;
+  for (int i = 0; i < s.size(); i++) {
+    if (last[s[i]] != -1) {
+      ans = max(ans, i - last[s[i]]);
+      last[s[i]] = i;
+    }
+    last[s[i]] = i;
+  }
+  return ans;
 }
-
-
-
 
 void leetcode_lonest_substring_without_repeating() {
   // https://leetcode.com/problems/longest-substring-without-repeating-characters/description/
@@ -1674,7 +1804,7 @@ s consists of English letters, digits, symbols and spaces.
   s = "pwwkew";
   printf("res= %d (ans: 3)\n", lengthOfLongestSubstring(s));
 
-  printf("---- unordered_map --------\n");
+  printf("---- KES algorithm --------\n");
   s = "abcabcbb";
   printf("res= %d (ans: 3)\n", lengthOfLongestSubstringKES(s));
 
@@ -1683,8 +1813,6 @@ s consists of English letters, digits, symbols and spaces.
 
   s = "pwwkew";
   printf("res= %d (ans: 3)\n", lengthOfLongestSubstringKES(s));
-
-  
 }
 
 int alter(char c) {
